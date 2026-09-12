@@ -28,4 +28,19 @@ public class FencingEquipmentSet {
         this.bodyCord=bodyCord;
         this.fencingBag=fencingBag;
     }
+
+    @Override
+    public String toString() {
+        return "FencingEquipmentSet{" +
+                "weaponType='" + weaponType + '\'' +
+                ", mask='" + mask + '\'' +
+                ", jacketSize='" + jacketSize + '\'' +
+                ", gloveSize='" + gloveSize + '\'' +
+                ", hand='" + hand + '\'' +
+                ", chestProtector=" + chestProtector +
+                ", plastron=" + plastron +
+                ", bodyCord=" + bodyCord +
+                ", fencingBag=" + fencingBag +
+                '}';
+    }
 }

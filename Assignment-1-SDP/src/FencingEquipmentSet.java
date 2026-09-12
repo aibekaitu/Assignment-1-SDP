@@ -31,16 +31,11 @@ public class FencingEquipmentSet {
 
     @Override
     public String toString() {
-        return "FencingEquipmentSet{" +
-                "weaponType='" + weaponType + '\'' +
-                ", mask='" + mask + '\'' +
-                ", jacketSize='" + jacketSize + '\'' +
-                ", gloveSize='" + gloveSize + '\'' +
-                ", hand='" + hand + '\'' +
-                ", chestProtector=" + chestProtector +
-                ", plastron=" + plastron +
-                ", bodyCord=" + bodyCord +
-                ", fencingBag=" + fencingBag +
-                '}';
+        return "=== Fencing Equipment Set ===\n" +
+                "Weapon: " + weaponType + "\n" +
+                "Mask: " + mask + "\n" +
+                "Jacket Size: " + jacketSize + "\n" +
+                "Glove Size: " + gloveSize + "\n" +
+                "Hand: " + hand;
     }
 }

@@ -1,61 +1,92 @@
-# Fencing Equipment Design Patterns
+# Fencing Equipment Project
 
 ## Project Description
 
-This Java project demonstrates several design patterns using a fencing equipment and fencing blade system.
-
-The project includes:
+This project demonstrates three design patterns in Java:
 
 - Builder Pattern
 - Factory Method Pattern
 - Abstract Factory Pattern
 
-The Builder Pattern creates fencing equipment sets.
+The program is based on fencing.
 
-The Factory Method Pattern creates individual fencing blades:
+The user chooses a weapon:
 - Foil
 - Epee
 - Sabre
 
-The Abstract Factory Pattern creates families of fencing blades from different manufacturers:
+Then the user chooses a blade manufacturer:
 - BF
 - StM
 
+The program creates the blade and fencing equipment based on the user's choice.
 
-## Factory Method Pattern
+
+## Builder Pattern
+
+The Builder Pattern is used to create a fencing equipment set.
 
 ### Structure
 
 Product:
+FencingEquipmentSet
+
+Builder:
+FencingEquipmentBuilder
+
+Director:
+FencingEquipmentDirector
+
+Client:
+Main
+
+The Director can create equipment sets for:
+- Foil
+- Epee
+- Sabre
+
+
+## Factory Method Pattern
+
+The Factory Method Pattern is used to create a blade depending on the selected weapon.
+
+### Product
+
 Blade
 
-Concrete Products:
+### Concrete Products
+
 - FoilBlade
 - EpeeBlade
 - SabreBlade
 
-Creator:
+### Creator
+
 BladeFactory
 
-Concrete Creators:
+### Concrete Creators
+
 - FoilBladeFactory
 - EpeeBladeFactory
 - SabreBladeFactory
 
-### How It Works
-
-Each concrete factory creates one type of blade.
-
 Example:
 
-BladeFactory foilFactory = new FoilBladeFactory();
-Blade foilBlade = foilFactory.createBlade();
-foilBlade.displayInfo();
+Before:
 
-The client works with the BladeFactory and Blade interfaces instead of creating concrete blade objects directly.
+Blade blade = new FoilBlade();
+
+After:
+
+BladeFactory bladeFactory = new FoilBladeFactory();
+Blade blade = bladeFactory.createBlade();
+
+Now the creation of the blade is handled by the factory.
 
 
 ## Abstract Factory Pattern
+
+The Abstract Factory Pattern is used to create blade families from different manufacturers.
 
 ### Abstract Products
 
@@ -63,14 +94,14 @@ The client works with the BladeFactory and Blade interfaces instead of creating 
 - Epee
 - Sabre
 
-### Product Families
+### BF Family
 
-BF family:
 - BFFoil
 - BFEpee
 - BFSabre
 
-StM family:
+### StM Family
+
 - StMFoil
 - StMEpee
 - StMSabre
@@ -79,7 +110,7 @@ StM family:
 
 FencingBladeFactory
 
-It contains:
+It has three methods:
 
 Foil createFoil();
 Epee createEpee();
@@ -90,19 +121,31 @@ Sabre createSabre();
 - BFBladeFactory
 - StMBladeFactory
 
-Each factory creates a complete family of related blades.
+BFBladeFactory creates BF blades.
 
-For example, BFBladeFactory creates:
+StMBladeFactory creates StM blades.
 
-- BFFoil
-- BFEpee
-- BFSabre
 
-StMBladeFactory creates:
+## How The Patterns Work Together
 
-- StMFoil
-- StMEpee
-- StMSabre
+First, the user chooses a weapon.
+
+For example:
+
+1 - Foil
+2 - Epee
+3 - Sabre
+
+Factory Method creates the selected blade type.
+
+Then the user chooses the manufacturer:
+
+1 - BF
+2 - StM
+
+Abstract Factory creates the selected blade from this family.
+
+Builder creates the equipment set for the selected weapon.
 
 
 ## Clean Code Principles
@@ -117,12 +160,12 @@ After:
 
 Sabre createSabre();
 
-The corrected method name clearly describes its purpose and follows the same naming style as createFoil() and createEpee().
+The second name is clear and correctly describes what the method does.
 
 
 ### 2. Small Methods
 
-Each factory method has only one responsibility.
+Each factory method does only one task.
 
 Example:
 
@@ -130,22 +173,22 @@ public Foil createFoil() {
     return new BFFoil();
 }
 
-The method only creates and returns a Foil product.
+This method only creates a foil blade.
 
 
-### 3. Single Responsibility Principle
+### 3. Single Responsibility
 
-Different classes have different responsibilities.
+Each class has its own responsibility.
 
-Blade products represent blades.
+FencingEquipmentBuilder builds the equipment.
 
-BladeFactory classes create individual blade objects.
+BladeFactory creates blades.
 
-FencingBladeFactory creates families of related products.
+FencingBladeFactory creates blade families.
 
-FencingBladeClient uses the created products.
+FencingBladeClient works with the selected family.
 
-This keeps creation logic separate from client logic.
+Main handles the user's choice.
 
 
 ### 4. Program to Interfaces
@@ -158,51 +201,61 @@ After:
 
 Foil foil = factory.createFoil();
 
-The client depends on the Foil interface and FencingBladeFactory instead of directly depending on concrete classes.
-
-This reduces coupling between the client and concrete products.
+The client works with the Foil interface instead of directly depending on BFFoil.
 
 
-### 5. DRY (Don't Repeat Yourself)
+### 5. DRY
 
-Before, separate client logic could be written for every manufacturer.
+Before, separate code could be written for every manufacturer.
 
-After, the same FencingBladeClient works with both factories:
+After, the same FencingBladeClient can work with different factories.
 
-FencingBladeClient bfClient =
-        new FencingBladeClient(new BFBladeFactory());
+Example:
 
-FencingBladeClient stmClient =
-        new FencingBladeClient(new StMBladeFactory());
+FencingBladeClient client =
+        new FencingBladeClient(familyFactory);
 
-The same client code can work with different product families without duplicating its internal logic.
+The client can work with BFBladeFactory or StMBladeFactory without creating a different client.
 
 
-## Output Example
+## Example Output
 
-Factory Method
+Choose fencing weapon:
+1 - Foil
+2 - Epee
+3 - Sabre
 
+1
+
+Factory Method:
 Blade type: Foil
-Blade type: Epee
-Blade type: Sabre
 
-Abstract Factory
+Choose blade manufacturer:
+1 - BF
+2 - StM
 
-BF Blades:
-BF Foil Blade
-BF Epee Blade
-BF Sabre Blade
+2
 
-StM Blades:
+Abstract Factory:
 StM Foil Blade
-StM Epee Blade
-StM Sabre Blade
+
+Fencing Equipment Set:
+=== Fencing Equipment Set ===
+Weapon: Foil
+Mask: Foil Mask
+Jacket Size: M
+Glove Size: M
+Hand: Right
 
 
 ## Conclusion
 
-The Factory Method Pattern is used to create individual blade types without directly creating concrete products in the client.
+This project uses Builder, Factory Method, and Abstract Factory patterns.
 
-The Abstract Factory Pattern is used to create families of related Foil, Epee, and Sabre blades.
+Builder creates the fencing equipment set.
 
-The project demonstrates how design patterns can reduce coupling, separate object creation from usage, and make the code easier to extend.
+Factory Method creates the selected blade type.
+
+Abstract Factory creates blades from different manufacturer families.
+
+All three patterns are connected through the user's weapon and manufacturer choices.

@@ -1,149 +1,208 @@
-# Fencing Equipment Builder
+# Fencing Equipment Design Patterns
 
 ## Project Description
 
-This project shows the Builder Pattern in Java.
+This Java project demonstrates several design patterns using a fencing equipment and fencing blade system.
 
-The program creates fencing equipment sets for three weapon types:
+The project includes:
+
+- Builder Pattern
+- Factory Method Pattern
+- Abstract Factory Pattern
+
+The Builder Pattern creates fencing equipment sets.
+
+The Factory Method Pattern creates individual fencing blades:
 - Foil
 - Epee
 - Sabre
 
-The user chooses a weapon type. After that, the program creates the correct equipment set.
+The Abstract Factory Pattern creates families of fencing blades from different manufacturers:
+- BF
+- StM
 
-## Builder Pattern Structure
 
-Product: FencingEquipmentSet
+## Factory Method Pattern
 
-Builder: FencingEquipmentBuilder
+### Structure
 
-Director: FencingEquipmentDirector
+Product:
+Blade
 
-Client: Main
+Concrete Products:
+- FoilBlade
+- EpeeBlade
+- SabreBlade
 
-## How It Works
+Creator:
+BladeFactory
 
-The user chooses one weapon:
+Concrete Creators:
+- FoilBladeFactory
+- EpeeBladeFactory
+- SabreBladeFactory
 
-1 - Foil
-2 - Epee
-3 - Sabre
+### How It Works
 
-The program checks the user's choice.
-
-Then the Director creates the selected equipment set with the Builder.
+Each concrete factory creates one type of blade.
 
 Example:
 
-Choose fencing weapon:
-1 - Foil
-2 - Epee
-3 - Sabre
+BladeFactory foilFactory = new FoilBladeFactory();
+Blade foilBlade = foilFactory.createBlade();
+foilBlade.displayInfo();
 
-3
+The client works with the BladeFactory and Blade interfaces instead of creating concrete blade objects directly.
 
-=== Fencing Equipment Set ===
-Weapon: Sabre
-Mask: Sabre Mask
-Jacket Size: M
-Glove Size: M
-Hand: Right
+
+## Abstract Factory Pattern
+
+### Abstract Products
+
+- Foil
+- Epee
+- Sabre
+
+### Product Families
+
+BF family:
+- BFFoil
+- BFEpee
+- BFSabre
+
+StM family:
+- StMFoil
+- StMEpee
+- StMSabre
+
+### Abstract Factory
+
+FencingBladeFactory
+
+It contains:
+
+Foil createFoil();
+Epee createEpee();
+Sabre createSabre();
+
+### Concrete Factories
+
+- BFBladeFactory
+- StMBladeFactory
+
+Each factory creates a complete family of related blades.
+
+For example, BFBladeFactory creates:
+
+- BFFoil
+- BFEpee
+- BFSabre
+
+StMBladeFactory creates:
+
+- StMFoil
+- StMEpee
+- StMSabre
+
 
 ## Clean Code Principles
 
 ### 1. Meaningful Names
 
-I used clear names for classes, methods, and variables.
-
-For example:
-
-FencingEquipmentSet
-FencingEquipmentBuilder
-createFoilSet()
-createEpeeSet()
-createSabreSet()
-
-These names make the code easier to understand.
-
-### 2. Small Methods
-
-My methods are small and have one main task.
-
-For example:
-
-public FencingEquipmentBuilder setWeaponType(String weaponType) {
-    this.weaponType = weaponType;
-    return this;
-}
-
-This method only sets the weapon type.
-
-### 3. Single Responsibility
-
-Each class has its own job.
-
-FencingEquipmentSet stores information about the equipment.
-
-FencingEquipmentBuilder builds the equipment set.
-
-FencingEquipmentDirector creates ready sets for Foil, Epee, and Sabre.
-
-Main gets the user's choice and shows the result.
-
-### 4. Validated Construction
-
-The build() method checks important information before creating the object.
-
-For example:
-
-if (weaponType == null || weaponType.isBlank()) {
-    throw new IllegalStateException("Weapon type is required!");
-}
-
-If important information is missing, the program shows an error.
-
-This helps prevent creating an incorrect equipment set.
-
-### 5. DRY (Don't Repeat Yourself)
-
-Some code was repeated in the Director.
-
 Before:
 
-builder.setJacketSize("M");
-builder.setGloveSize("M");
-builder.setHand("Right");
-builder.setChestProtector(true);
-builder.setFencingBag(true);
-builder.setPlastron(true);
-builder.setBodyCord(true);
-
-The same code was needed for different weapon sets.
+Sabre crateSabre();
 
 After:
 
-private void setStandardEquipment(FencingEquipmentBuilder builder) {
-    builder.setJacketSize("M");
-    builder.setGloveSize("M");
-    builder.setHand("Right");
-    builder.setChestProtector(true);
-    builder.setFencingBag(true);
-    builder.setPlastron(true);
-    builder.setBodyCord(true);
+Sabre createSabre();
+
+The corrected method name clearly describes its purpose and follows the same naming style as createFoil() and createEpee().
+
+
+### 2. Small Methods
+
+Each factory method has only one responsibility.
+
+Example:
+
+public Foil createFoil() {
+    return new BFFoil();
 }
 
-Now I can use:
+The method only creates and returns a Foil product.
 
-setStandardEquipment(builder);
 
-This makes the code shorter and removes repeated code.
+### 3. Single Responsibility Principle
+
+Different classes have different responsibilities.
+
+Blade products represent blades.
+
+BladeFactory classes create individual blade objects.
+
+FencingBladeFactory creates families of related products.
+
+FencingBladeClient uses the created products.
+
+This keeps creation logic separate from client logic.
+
+
+### 4. Program to Interfaces
+
+Before:
+
+BFFoil foil = new BFFoil();
+
+After:
+
+Foil foil = factory.createFoil();
+
+The client depends on the Foil interface and FencingBladeFactory instead of directly depending on concrete classes.
+
+This reduces coupling between the client and concrete products.
+
+
+### 5. DRY (Don't Repeat Yourself)
+
+Before, separate client logic could be written for every manufacturer.
+
+After, the same FencingBladeClient works with both factories:
+
+FencingBladeClient bfClient =
+        new FencingBladeClient(new BFBladeFactory());
+
+FencingBladeClient stmClient =
+        new FencingBladeClient(new StMBladeFactory());
+
+The same client code can work with different product families without duplicating its internal logic.
+
+
+## Output Example
+
+Factory Method
+
+Blade type: Foil
+Blade type: Epee
+Blade type: Sabre
+
+Abstract Factory
+
+BF Blades:
+BF Foil Blade
+BF Epee Blade
+BF Sabre Blade
+
+StM Blades:
+StM Foil Blade
+StM Epee Blade
+StM Sabre Blade
+
 
 ## Conclusion
 
-This project shows how the Builder Pattern works in Java.
+The Factory Method Pattern is used to create individual blade types without directly creating concrete products in the client.
 
-The Builder creates the fencing equipment set step by step.
+The Abstract Factory Pattern is used to create families of related Foil, Epee, and Sabre blades.
 
-The Director creates ready equipment sets for Foil, Epee, and Sabre.
-
-The user can choose which equipment set they want.
+The project demonstrates how design patterns can reduce coupling, separate object creation from usage, and make the code easier to extend.

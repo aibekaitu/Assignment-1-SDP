@@ -1,4 +1,5 @@
 package abstractBladeFactory;
+
 import bladeProducts.Foil;
 import bladeProducts.Epee;
 import bladeProducts.Sabre;
@@ -6,11 +7,7 @@ import bfBlades.BFFoil;
 import bfBlades.BFEpee;
 import bfBlades.BFSabre;
 
-public class BFBladeFactory implements FencingBladeFactory{
-    @Override
-    public Epee createEpee() {
-        return new BFEpee();
-    }
+public class BFBladeFactory implements FencingBladeFactory {
 
     @Override
     public Foil createFoil() {
@@ -18,7 +15,12 @@ public class BFBladeFactory implements FencingBladeFactory{
     }
 
     @Override
-    public Sabre crateSabree() {
+    public Epee createEpee() {
+        return new BFEpee();
+    }
+
+    @Override
+    public Sabre createSabre() {
         return new BFSabre();
     }
 }

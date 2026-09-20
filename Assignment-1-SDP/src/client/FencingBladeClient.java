@@ -1,25 +1,30 @@
 package client;
 
 import abstractBladeFactory.FencingBladeFactory;
-import bladeProducts.Foil;
 import bladeProducts.Epee;
+import bladeProducts.Foil;
 import bladeProducts.Sabre;
 
 public class FencingBladeClient {
 
-    private final Foil foil;
-    private final Epee epee;
-    private final Sabre sabre;
+    private final FencingBladeFactory factory;
 
     public FencingBladeClient(FencingBladeFactory factory) {
-        foil = factory.createFoil();
-        epee = factory.createEpee();
-        sabre = factory.createSabre();
+        this.factory = factory;
     }
 
-    public void displayBlades() {
+    public void displayFoil() {
+        Foil foil = factory.createFoil();
         foil.displayInfo();
+    }
+
+    public void displayEpee() {
+        Epee epee = factory.createEpee();
         epee.displayInfo();
+    }
+
+    public void displaySabre() {
+        Sabre sabre = factory.createSabre();
         sabre.displayInfo();
     }
 }
